@@ -6,7 +6,8 @@
 
 <body>
   <h1>User List</h1>
-  <p>아이디(기본키) : <span th:text="${data4.id}"></span></p>
-  <p>이름 : <span th:text="${data4.name}"></span></p>
-</body>
+
+  <div th:each="user : ${users}"> 
+        <p>아이디(기본키): <span th:text="${user.id}"></span></p> <p>이름 : <span th:text="${user.name}"></span></p> <hr> </div>
+    </body>
 </html>
