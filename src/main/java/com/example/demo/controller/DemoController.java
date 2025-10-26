@@ -12,6 +12,7 @@ import com.example.demo.model.domain.TestDB
 ;
 import com.example.demo.model.service.TestService
 ; // 최상단 서비스 클래스 연동 추가
+import java.util.List;
 
 @Controller // 컨트롤러 어노테이션 명시
 public class DemoController{
@@ -57,9 +58,9 @@ public class DemoController{
   // 하단에 맵핑 이어서 추가
   @GetMapping("/testdb")
     public String getAllTestDBs(Model model) {
-      TestDB test = testService.findByName("홍길동");
-      model.addAttribute("data4", test);
-      System.out.println("데이터 출력 디버그 : " + test);
+      List<TestDB> userList = testService.findAllUsers();
+      model.addAttribute("users", userList);
+      System.out.println("데이터 출력 디버그 : " + userList);
       return "testdb";
   }
 
