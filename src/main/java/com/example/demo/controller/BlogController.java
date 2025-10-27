@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping
 ;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import com.example.demo.model.domain.Article
@@ -66,6 +67,15 @@ public class BlogController{
     public String deleteArticle(@PathVariable Long id) {
       blogService.delete(id);
       return "redirect:/article_list";
+    }
+
+    @PostMapping("/api/articles") // form의 action 경로와 동일하게 설정
+    public String addArticleRedirect(@ModelAttribute AddArticleRequest request) {
+        // 1. BlogService의 save 메서드를 호출하여 게시글 저장
+        blogService.save(request); 
+
+        // 2. 저장 후 "/article_list" 경로로 리다이렉트 (페이지 자동 이동)
+        return "redirect:/article_list"; 
     }
 }
 
