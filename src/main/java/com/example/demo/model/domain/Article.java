@@ -15,6 +15,7 @@ public class Article {
   private Long id;
   @Column(name = "title", nullable = false) // null x
   private String title = "";
+  
   @Column(name = "content", nullable = false)
   private String content = "";
   

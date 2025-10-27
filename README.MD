@@ -3,6 +3,7 @@
 • 2-2주차[컨트롤러 입문]
 • 3주차[포트폴리오템플릿 작성]
 • 4주차: [MYSQl 연동 및 작성]
+• 5주차: [블로그 게시판 글쓰기 , 수정 구현]
 
 2. 연습문제(모두 완료)
 • 2주차: URL 맵핑과 컨트롤러 추가하기
@@ -70,46 +71,67 @@ DemoController.java의 /testdb 맵핑을 수정하여 findAllUsers() 결과를 M
 
 testdb.html을 수정하여 Thymeleaf th:each 반복문을 사용해 users 리스트의 모든 사용자 ID와 이름을 출력
 
+
+• 5주차: [페이지 리다이렉트]
+
+글쓰기 처리 방식을 @Controller 방식으로 변경.
+
+
+BlogController.java에 @PostMapping("/api/articles") 메서드 추가 .
+
+게시글 저장(blogService.save()) 후, "redirect:/article_list"를 반환하여 목록 페이지로 자동 이동(리다이렉트) 구현.
+
+충돌 방지를 위해 BlogRestController.java의 @PostMapping("/api/articles") 메서드 주석 처리.
+
+
+
 3. 내용 수정 • 텍스트,디자인 등
 메뉴 수정: 네비게이션 바 메뉴 한글화 (3주차) . 
 • 프로필 이미지 src="img/profile2.png(AI 본인 프로필사진) 으로 교체 (3주차). 
 • 내소개(About)' 텍스트 수정 (3주차) . 
 • 기술 & 경험(Skills & Expertise) 섹션 텍스트 한글 수정 (4주차) . 
 • Thymeleaf 테스트 페이지 (thymeleaf_test1.html) 생성 및 th:utext, th:value, th:field, th:href, th:with 문법 실습 (4주차)
+• 게시판 링크 추가: index.html 네비게이션 바 '게시판' 메뉴에 /article_list 링크 추가 (5주차) .
 
 4. 소스 코드 정리 • 파일명, 들여쓰기, 주석 표시
 HTML (templates):
 
-index.html: 메인 포트폴리오 페이지 (3주차 수정)
+index.html, about_detailed.html, hello.html, hello2.html, testdb.html, thymeleaf_test1.html
 
-about_detailed.html: '상세 소개' 전용 페이지 (3주차 추가)
-
-hello.html, hello2.html: (2주차 연습문제용 파일)
-
-testdb.html: DB 연동 테스트 결과 출력 페이지 (4주차 추가)
-
-thymeleaf_test1.html: Thymeleaf 문법 테스트 페이지 (4주차 추가)
+article_list.html: 블로그 게시판 목록 및 글쓰기 폼 페이지 (5주차 추가)
 
 Java:
 
-DemoApplication.java: 메인 시작 파일
+DemoApplication.java
 
-controller/DemoController.java: 모든 URL 맵핑(@GetMapping) 관리 (/hello, /hello2, /about_detailed, /index, /test1, /testdb)
+controller/DemoController.java
 
-domain/TestDB.java: DB 테이블과 매핑되는 @Entity 클래스 (4주차 추가)
+controller/BlogController.java: 게시판 조회(/article_list) 및 글쓰기 후 리다이렉트(/api/articles POST) 맵핑 (5주차 추가/수정)
 
-repository/TestRepository.java: JpaRepository를 상속받는 인터페이스 (4주차 추가)
+controller/BlogRestController.java: REST 방식 글쓰기(/api/articles POST) 맵핑 (5주차 추가, 연습문제 풀이 시 주석 처리)
 
-service/TestService.java: 비즈니스 로직 클래스 (findByName, findAllUsers) (4주차 추가)
+domain/TestDB.java
+
+domain/Article.java: 게시판 글 @Entity 클래스 (5주차 추가)
+
+repository/TestRepository.java
+
+repository/BlogRepository.java: 게시판 JpaRepository 인터페이스 (5주차 추가)
+
+service/TestService.java
+
+service/BlogService.java: 게시판 비즈니스 로직 (findAll, save) (5주차 추가)
+
+service/AddArticleRequest.java: 게시글 추가용 DTO 클래스 (5주차 추가)
 
 Static Resources (static):
 
-css/, js/, img/, lib/: 템플릿 정적 자원 관리
+css/, js/, img/, lib/
 
-js/main.js: confirmClose() 함수 추가 (3주차 수정)
+js/main.js (3주차 수정)
 
 Configuration (resources):
 
-application.properties: 정적 리소스 경로 및 DB 연결 정보, JPA 설정 추가 (3, 4주차 수정)
+application.properties (3, 4주차 수정)
 
-pom.xml: JPA, MySQL Connector 의존성 주석 해제 (4주차 수정)
+pom.xml (4주차 수정)
