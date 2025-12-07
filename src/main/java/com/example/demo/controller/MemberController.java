@@ -67,7 +67,7 @@ public class MemberController {
 
     @GetMapping("/api/logout") // 로그아웃 버튼 동작
     public String member_logout(Model model, HttpServletRequest request2, HttpServletResponse response) {
-      try {
+    try {
         HttpSession session = request2.getSession(false); // 기존 세션 가져오기(존재하지 않으면 null 반환)
         session.invalidate(); // 기존 세션 무효화
         Cookie cookie = new Cookie("JSESSIONID", null); // 기본 이름은 JSESSIONID
@@ -80,6 +80,6 @@ public class MemberController {
         } catch (IllegalArgumentException e) {
           model.addAttribute("error", e.getMessage()); // 에러 메시지 전달
           return "login"; // 로그인 실패 시 로그인 페이지로 리다이렉트
-          }
+        }
     }
 }
