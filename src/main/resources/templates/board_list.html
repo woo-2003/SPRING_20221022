@@ -30,7 +30,7 @@
       <table class="table table-bordered">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>글번호</th>
               <th>제목</th>
               <th>작성자</th>
               <th>작성일</th>
@@ -39,8 +39,8 @@
             </tr>
           </thead>
           <tbody>
-              <tr th:each="board : ${boards}">
-                <td th:text="${board.id}"></td>
+              <tr th:each="board, iterStat : ${boards.content}">
+                <td th:text="${startNum + iterStat.index}"></td>
                 <td>
                   <a th:href="@{/board_view/{id}(id=${board.id})}">
                     <span th:text="${board.title}"></span>

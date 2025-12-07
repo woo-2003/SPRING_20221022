@@ -60,7 +60,8 @@ public class BlogController{
         }
         System.out.println("세션 userId: " + userId); // 서버 IDE 터미널에 세션 값 출력
     {
-      PageRequest pageable = PageRequest.of(page, 5); // 한 페이지의 게시글 수
+      int pageSize = 5; // 한 페이지의 게시글 수
+      PageRequest pageable = PageRequest.of(page, pageSize); // 한 페이지의 게시글 수
       Page<Board> list; // Page를 반환
 
       if (keyword.isEmpty()) {
@@ -69,11 +70,15 @@ public class BlogController{
         list = blogService.searchByKeyword(keyword, pageable); // 키워드로 검색
       }
 
+      // 페이지 기준 시작 번호 계산
+      int startNum = (page * pageSize) + 1;
+
       model.addAttribute("boards", list); // 모델에 추가
       model.addAttribute("totalPages", list.getTotalPages()); // 페이지 크기
       model.addAttribute("currentPage", page); // 페이지 번호
       model.addAttribute("keyword", keyword); // 키워드
       model.addAttribute("email", email); // 로그인 사용자(이메일)
+      model.addAttribute("startNum", startNum); // 시작 번호
 
       return "board_list"; // .HTML 연결
     }
@@ -148,6 +153,12 @@ public class BlogController{
     public String deleteArticle(@PathVariable Long id) {
       blogService.delete(id);
       return "redirect:/article_list";
+    }
+
+    @DeleteMapping("/api/board_delete/{id}")
+    public String deleteBoard(@PathVariable Long id) {
+      blogService.deleteBoard(id);
+      return "redirect:/board_list";
     }
 
     @PostMapping("/api/articles") // form의 action 경로와 동일하게 설정
