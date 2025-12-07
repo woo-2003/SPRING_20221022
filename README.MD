@@ -8,6 +8,7 @@
 - 5주차: [블로그 게시판 조회, 글쓰기 구현]
 - 6주차: [블로그 게시판 수정 ,삭제 구현]
 - 7주차: [블로그 게시판 글 수정]
+- 9주차: [게시판 – 검색, 페이징]
 
 ## 2. 연습문제(모두 완료)
 - 2주차: URL 맵핑과 컨트롤러 추가하기
@@ -139,6 +140,58 @@ public String updateBoard(@PathVariable Long id, @ModelAttribute AddArticleReque
 
   - board_edit.html 템플릿 생성. 현재 게시글의 제목과 내용을 폼에 미리 채워넣어 수정 가능하도록 구현.
 
+- 9주차: [게시판 – 검색, 페이징]
+  - 게시판 페이지 글 번호 표시 개선: DB의 id 대신 페이지 기준 순차 번호로 변경.
+
+```java
+// BlogController.java
+@GetMapping("/board_list")
+public String board_list(...) {
+  int pageSize = 5; // 한 페이지의 게시글 수
+  // 페이지 기준 시작 번호 계산
+  int startNum = (page * pageSize) + 1;
+  model.addAttribute("startNum", startNum); // 시작 번호
+  ...
+}
+```
+
+  - board_list.html에서 "ID" 컬럼을 "글번호"로 변경하고 순차 번호 출력.
+
+```html
+<!-- board_list.html -->
+<thead>
+  <tr>
+    <th>글번호</th>
+    ...
+  </tr>
+</thead>
+<tbody>
+  <tr th:each="board, iterStat : ${boards.content}">
+    <td th:text="${startNum + iterStat.index}"></td>
+    ...
+  </tr>
+</tbody>
+```
+
+  - BlogService.java에 deleteBoard(Long id) 메서드 추가.
+
+```java
+// BlogService.java
+public void deleteBoard(Long id) {
+  blogRepository2.deleteById(id);
+}
+```
+
+  - BlogController.java에 /api/board_delete/{id} DELETE 맵핑 추가하여 삭제 처리 후 board_list로 리다이렉트.
+
+```java
+@DeleteMapping("/api/board_delete/{id}")
+public String deleteBoard(@PathVariable Long id) {
+  blogService.deleteBoard(id);
+  return "redirect:/board_list";
+}
+```
+
 ## 3. 홈페이지 내용 수정
 - 텍스트,디자인 등
 - 메뉴 수정: 네비게이션 바 메뉴 한글화 (3주차) . 
@@ -164,12 +217,13 @@ public String updateBoard(@PathVariable Long id, @ModelAttribute AddArticleReque
     - `POST /api/articles`: 글 저장 후 목록으로 리다이렉트.
     - `PUT /api/article_edit/{id}`: 글 수정 처리 후 목록으로 리다이렉트.
     - `DELETE /api/article_delete/{id}`: 글 삭제 처리 후 목록으로 리다이렉트.
-    - `GET /board_list`: Board 게시글 목록 조회(페이징, 검색 지원) 후 `board_list.html` 렌더.
+    - `GET /board_list`: Board 게시글 목록 조회(페이징, 검색 지원) 후 `board_list.html` 렌더. 페이지 기준 시작 번호(startNum) 계산하여 전달(9주차 수정).
     - `GET /board_view/{id}`: Board 게시글 상세 조회 후 `board_view.html` 렌더.
     - `GET /board_write`: 글쓰기 화면 렌더.
     - `GET /board_edit/{id}`: Board 게시글 수정 화면 렌더(7주차 추가).
     - `POST /api/boards`: Board 글 저장 후 목록으로 리다이렉트.
     - `PUT /api/board_edit/{id}`: Board 글 수정 처리 후 목록으로 리다이렉트(7주차 추가).
+    - `DELETE /api/board_delete/{id}`: Board 글 삭제 처리 후 목록으로 리다이렉트(9주차 추가).
   - controller/BlogRestController.java: REST 관련 보조 컨트롤러.
     - `GET /favicon.ico`: 빈 처리(불필요한 에러 방지). 주석 처리된 REST 예제 포함.
   - controller/DemoController.java: 실습용 화면 컨트롤러.
@@ -186,14 +240,14 @@ public String updateBoard(@PathVariable Long id, @ModelAttribute AddArticleReque
   - model/repository/BoardRepository.java: `Board`용 `JpaRepository<Board, Long>` + `findByTitleContainingIgnoreCase` (페이징 검색 지원).
   - model/repository/TestRepository.java: `TestDB`용 `JpaRepository<TestDB, Long>` + `findByName(String)`.
   - model/service/AddArticleRequest.java: 게시글 생성/수정 DTO. `toEntity()`로 `Board` 빌드. title, content 외 user, newdate, count, likec 필드 포함.
-  - model/service/BlogService.java: 게시판 비즈니스 로직. `findAll`, `save`, `findById`, `update`, `delete` 제공. `update` 메서드는 Board 엔티티 사용, 기존 필드(user, newdate, count, likec) 유지하며 제목/내용만 수정(7주차 수정).
+  - model/service/BlogService.java: 게시판 비즈니스 로직. `findAll`, `save`, `findById`, `update`, `delete`, `deleteBoard` 제공. `update` 메서드는 Board 엔티티 사용, 기존 필드(user, newdate, count, likec) 유지하며 제목/내용만 수정(7주차 수정). `deleteBoard` 메서드 추가(9주차 추가).
   - model/service/TestService.java: 사용자 조회 비즈니스. `findByName`, `findAllUsers` 제공.
 
 - Resources (src/main/resources)
   - application.properties: 앱 이름, 정적 리소스 경로, MySQL 접속 정보, JPA 설정(ddl-auto=update, show-sql), HiddenHttpMethodFilter 활성화.
   - templates/article_list.html: 게시글 목록 테이블 + 글 추가 폼. 수정/삭제 UI와 폼 전송 포함.
   - templates/article_edit.html: 게시글 수정 폼 화면.
-  - templates/board_list.html: Board 게시글 목록 테이블(페이징, 검색 지원). 글쓰기 버튼 포함.
+  - templates/board_list.html: Board 게시글 목록 테이블(페이징, 검색 지원). 글쓰기 버튼 포함. "ID" 컬럼을 "글번호"로 변경하고 페이지 기준 순차 번호 출력(9주차 수정).
   - templates/board_view.html: Board 게시글 상세 보기. 수정/삭제 버튼 포함.
   - templates/board_write.html: Board 글쓰기 폼 화면.
   - templates/board_edit.html: Board 게시글 수정 폼 화면. 현재 제목/내용을 폼에 미리 채워넣음(7주차 추가).
