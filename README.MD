@@ -7,6 +7,7 @@
 - 4주차: [MYSQl 연동 및 작성]
 - 5주차: [블로그 게시판 조회, 글쓰기 구현]
 - 6주차: [블로그 게시판 수정 ,삭제 구현]
+- 7주차: [블로그 게시판 글 수정]
 
 ## 2. 연습문제(모두 완료)
 - 2주차: URL 맵핑과 컨트롤러 추가하기
@@ -88,6 +89,56 @@ function confirmClose() {
   - @ExceptionHandler(MethodArgumentTypeMismatchException.class) 어노테이션을 사용하여 특정 예외 처리 메서드 지정.
   - 타입 불일치 예외 발생 시 보여줄 새로운 에러 페이지(error_page/error_type_mismatch.html) 생성 및 반환.
 
+- 7주차: [블로그 게시판 글 수정]
+  - BlogService.java의 update 메서드를 Board 엔티티 사용하도록 수정.
+  - 기존 게시글의 user, newdate, count, likec 값을 유지하면서 제목과 내용만 수정하도록 구현.
+
+```java
+// BlogService.java
+public void update(Long id, AddArticleRequest request) {
+  Optional<Board> optionalBoard = blogRepository2.findById(id); // 단일 글 조회
+  optionalBoard.ifPresent(board -> { // 값이 있으면
+    // 기존 게시글의 user, newdate, count, likec 값을 유지하면서 제목과 내용만 수정
+    board.update(
+      request.getTitle(), 
+      request.getContent(), 
+      board.getUser(), 
+      board.getNewdate(), 
+      board.getCount(), 
+      board.getLikec()
+    ); // 값을 수정
+    blogRepository2.save(board); // Board 객체에 저장
+  });
+}
+```
+
+  - BlogController.java에 /board_edit/{id} GET 맵핑 추가하여 수정 화면 표시.
+
+```java
+@GetMapping("/board_edit/{id}") // 게시판 글 수정 화면 맵핑
+public String board_edit(Model model, @PathVariable Long id) {
+  Optional<Board> list = blogService.findById(id); // 선택한 게시판 글
+  if (list.isPresent()) {
+    model.addAttribute("board", list.get()); // 존재하면 Board 객체를 모델에 추가
+  } else {
+    return "error_page/article_error"; // 오류 처리 페이지로 연결
+  }
+  return "board_edit"; // .HTML 연결
+}
+```
+
+  - BlogController.java에 /api/board_edit/{id} PUT 맵핑 추가하여 수정 처리 후 board_list로 리다이렉트.
+
+```java
+@PutMapping("/api/board_edit/{id}")
+public String updateBoard(@PathVariable Long id, @ModelAttribute AddArticleRequest request) {
+  blogService.update(id, request);
+  return "redirect:/board_list"; // 글 수정 이후 board_list.html 연결
+}
+```
+
+  - board_edit.html 템플릿 생성. 현재 게시글의 제목과 내용을 폼에 미리 채워넣어 수정 가능하도록 구현.
+
 ## 3. 홈페이지 내용 수정
 - 텍스트,디자인 등
 - 메뉴 수정: 네비게이션 바 메뉴 한글화 (3주차) . 
@@ -113,6 +164,12 @@ function confirmClose() {
     - `POST /api/articles`: 글 저장 후 목록으로 리다이렉트.
     - `PUT /api/article_edit/{id}`: 글 수정 처리 후 목록으로 리다이렉트.
     - `DELETE /api/article_delete/{id}`: 글 삭제 처리 후 목록으로 리다이렉트.
+    - `GET /board_list`: Board 게시글 목록 조회(페이징, 검색 지원) 후 `board_list.html` 렌더.
+    - `GET /board_view/{id}`: Board 게시글 상세 조회 후 `board_view.html` 렌더.
+    - `GET /board_write`: 글쓰기 화면 렌더.
+    - `GET /board_edit/{id}`: Board 게시글 수정 화면 렌더(7주차 추가).
+    - `POST /api/boards`: Board 글 저장 후 목록으로 리다이렉트.
+    - `PUT /api/board_edit/{id}`: Board 글 수정 처리 후 목록으로 리다이렉트(7주차 추가).
   - controller/BlogRestController.java: REST 관련 보조 컨트롤러.
     - `GET /favicon.ico`: 빈 처리(불필요한 에러 방지). 주석 처리된 REST 예제 포함.
   - controller/DemoController.java: 실습용 화면 컨트롤러.
@@ -123,17 +180,23 @@ function confirmClose() {
   - exception/GlobalExceptionHandler.java: 전역 예외 처리.
     - `MethodArgumentTypeMismatchException` 발생 시 `error_page/error_type_mismatch` 반환.
   - model/domain/Article.java: 게시글 JPA 엔티티(id, title, content). `@Builder`, `update(title, content)` 제공.
+  - model/domain/Board.java: 게시글 JPA 엔티티(id, title, content, user, newdate, count, likec). `@Builder`, `update(...)` 제공.
   - model/domain/TestDB.java: 예제 JPA 엔티티(id, name).
   - model/repository/BlogRepository.java: `Article`용 `JpaRepository<Article, Long>`.
+  - model/repository/BoardRepository.java: `Board`용 `JpaRepository<Board, Long>` + `findByTitleContainingIgnoreCase` (페이징 검색 지원).
   - model/repository/TestRepository.java: `TestDB`용 `JpaRepository<TestDB, Long>` + `findByName(String)`.
-  - model/service/AddArticleRequest.java: 게시글 생성 DTO. `toEntity()`로 `Article` 빌드.
-  - model/service/BlogService.java: 게시판 비즈니스 로직. `findAll`, `save`, `findById`, `update`, `delete` 제공.
+  - model/service/AddArticleRequest.java: 게시글 생성/수정 DTO. `toEntity()`로 `Board` 빌드. title, content 외 user, newdate, count, likec 필드 포함.
+  - model/service/BlogService.java: 게시판 비즈니스 로직. `findAll`, `save`, `findById`, `update`, `delete` 제공. `update` 메서드는 Board 엔티티 사용, 기존 필드(user, newdate, count, likec) 유지하며 제목/내용만 수정(7주차 수정).
   - model/service/TestService.java: 사용자 조회 비즈니스. `findByName`, `findAllUsers` 제공.
 
 - Resources (src/main/resources)
   - application.properties: 앱 이름, 정적 리소스 경로, MySQL 접속 정보, JPA 설정(ddl-auto=update, show-sql), HiddenHttpMethodFilter 활성화.
   - templates/article_list.html: 게시글 목록 테이블 + 글 추가 폼. 수정/삭제 UI와 폼 전송 포함.
   - templates/article_edit.html: 게시글 수정 폼 화면.
+  - templates/board_list.html: Board 게시글 목록 테이블(페이징, 검색 지원). 글쓰기 버튼 포함.
+  - templates/board_view.html: Board 게시글 상세 보기. 수정/삭제 버튼 포함.
+  - templates/board_write.html: Board 글쓰기 폼 화면.
+  - templates/board_edit.html: Board 게시글 수정 폼 화면. 현재 제목/내용을 폼에 미리 채워넣음(7주차 추가).
   - templates/error_page/error_type_mismatch.html: 잘못된 파라미터 타입 접근 시 표시하는 에러 페이지.
   - templates/hello.html: `hello` 화면 템플릿.
   - templates/hello2.html: 5개 모델 속성(data1~data5)을 `th:text`로 출력.

@@ -55,10 +55,18 @@ public class BlogService {
 
   
   public void update(Long id, AddArticleRequest request) {
-    Optional<Article> optionalArticle = blogRepository.findById(id); // 단일 글 조회
-    optionalArticle.ifPresent(article -> { // 값이 있으면
-      article.update(request.getTitle(), request.getContent()); // 값을 수정
-      blogRepository.save(article); // Article 객체에 저장
+    Optional<Board> optionalBoard = blogRepository2.findById(id); // 단일 글 조회
+    optionalBoard.ifPresent(board -> { // 값이 있으면
+      // 기존 게시글의 user, newdate, count, likec 값을 유지하면서 제목과 내용만 수정
+      board.update(
+        request.getTitle(), 
+        request.getContent(), 
+        board.getUser(), 
+        board.getNewdate(), 
+        board.getCount(), 
+        board.getLikec()
+      ); // 값을 수정
+      blogRepository2.save(board); // Board 객체에 저장
     });
   }
 
