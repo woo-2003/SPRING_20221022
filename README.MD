@@ -9,6 +9,7 @@
 - 6주차: [블로그 게시판 수정 ,삭제 구현]
 - 7주차: [블로그 게시판 글 수정]
 - 9주차: [게시판 – 검색, 페이징]
+- 10주차: [로그인과 로그아웃]
 
 ## 2. 연습문제(모두 완료)
 - 2주차: URL 맵핑과 컨트롤러 추가하기
@@ -192,6 +193,64 @@ public String deleteBoard(@PathVariable Long id) {
 }
 ```
 
+- 10주차: [입력값 필터링]
+  - pom.xml에 spring-boot-starter-validation 의존성 추가.
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+```
+
+  - AddMemberRequest.java에 검증 어노테이션 추가.
+    - 이름: @NotBlank, @Pattern으로 특수문자 제외 검증.
+    - 이메일: @NotBlank, @Email로 이메일 형식 검증.
+    - 비밀번호: @NotBlank, @Pattern으로 8자 이상, 대소문자 및 숫자 포함 검증.
+    - 나이: @NotBlank, @Pattern으로 19세 이상 90세 이하 검증.
+    - 모바일, 주소: 공백 허용(검증 없음).
+
+```java
+// AddMemberRequest.java
+@NotBlank(message = "이름은 필수입니다.")
+@Pattern(regexp = "^[A-Za-z가-힣0-9]+$", message = "이름에는 특수문자를 사용할 수 없습니다.")
+private String name;
+
+@NotBlank(message = "이메일은 필수입니다.")
+@Email(message = "올바른 이메일 형식이 아닙니다.")
+private String email;
+
+@NotBlank(message = "비밀번호는 필수입니다.")
+@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "비밀번호는 8자 이상, 대소문자 및 숫자를 포함해야 합니다.")
+private String password;
+
+@NotBlank(message = "나이는 필수입니다.")
+@Pattern(regexp = "^(19|[2-8]\\d|90)$", message = "나이는 19세 이상 90세 이하여야 합니다.")
+private String age;
+```
+
+  - MemberController.java의 addmembers 메서드에 @Valid 어노테이션 추가.
+
+```java
+@PostMapping("/api/members") // 회원 가입 저장
+public String addmembers(@Valid @ModelAttribute AddMemberRequest request) {
+    memberService.saveMember(request);
+    return "join_end"; // .HTML 연결
+}
+```
+
+  - memberService.java 클래스에 @Validated 어노테이션 추가하여 서비스 계층에서도 검증 활성화.
+
+```java
+@Service
+@Validated // 서비스 계층에서 검증 활성화
+@Transactional
+@RequiredArgsConstructor
+public class memberService {
+    ...
+}
+```
+
 ## 3. 홈페이지 내용 수정
 - 텍스트,디자인 등
 - 메뉴 수정: 네비게이션 바 메뉴 한글화 (3주차) . 
@@ -206,7 +265,7 @@ public String deleteBoard(@PathVariable Long id) {
 - 각 파일의 역할 설명 (실제 코드 내용 기반)
 
 - 루트/빌드
-  - pom.xml: Spring Boot 3.5.7, Java 21, Web/Thymeleaf/JPA/Actuator, Lombok, Devtools, MySQL Connector 의존성 및 플러그인 설정.
+  - pom.xml: Spring Boot 3.5.7, Java 21, Web/Thymeleaf/JPA/Actuator, Lombok, Devtools, MySQL Connector, Validation 의존성 및 플러그인 설정(10주차 수정).
   - mvnw, mvnw.cmd: Maven Wrapper 실행 스크립트.
 
 - Java (src/main/java)
@@ -226,6 +285,12 @@ public String deleteBoard(@PathVariable Long id) {
     - `DELETE /api/board_delete/{id}`: Board 글 삭제 처리 후 목록으로 리다이렉트(9주차 추가).
   - controller/BlogRestController.java: REST 관련 보조 컨트롤러.
     - `GET /favicon.ico`: 빈 처리(불필요한 에러 방지). 주석 처리된 REST 예제 포함.
+  - controller/MemberController.java: 회원 관련 컨트롤러.
+    - `GET /join_new`: 회원 가입 페이지 렌더.
+    - `POST /api/members`: 회원 가입 처리. @Valid로 입력값 검증(10주차 수정).
+    - `GET /member_login`: 로그인 페이지 렌더.
+    - `POST /api/login_check`: 로그인 처리(이메일, 비밀번호 확인).
+    - `GET /api/logout`: 로그아웃 처리.
   - controller/DemoController.java: 실습용 화면 컨트롤러.
     - `GET /hello`, `/hello2`: 모델 데이터 전달 및 템플릿 렌더.
     - `GET /about_detailed`, `/index`: 포트폴리오/메인 페이지 연결.
@@ -235,12 +300,16 @@ public String deleteBoard(@PathVariable Long id) {
     - `MethodArgumentTypeMismatchException` 발생 시 `error_page/error_type_mismatch` 반환.
   - model/domain/Article.java: 게시글 JPA 엔티티(id, title, content). `@Builder`, `update(title, content)` 제공.
   - model/domain/Board.java: 게시글 JPA 엔티티(id, title, content, user, newdate, count, likec). `@Builder`, `update(...)` 제공.
+  - model/domain/Member.java: 회원 JPA 엔티티(id, name, email, password, age, mobile, address). `@Builder` 제공. email은 unique 제약.
   - model/domain/TestDB.java: 예제 JPA 엔티티(id, name).
   - model/repository/BlogRepository.java: `Article`용 `JpaRepository<Article, Long>`.
   - model/repository/BoardRepository.java: `Board`용 `JpaRepository<Board, Long>` + `findByTitleContainingIgnoreCase` (페이징 검색 지원).
+  - model/repository/MemberRepository.java: `Member`용 `JpaRepository<Member, Long>` + `findByEmail(String)`.
   - model/repository/TestRepository.java: `TestDB`용 `JpaRepository<TestDB, Long>` + `findByName(String)`.
   - model/service/AddArticleRequest.java: 게시글 생성/수정 DTO. `toEntity()`로 `Board` 빌드. title, content 외 user, newdate, count, likec 필드 포함.
+  - model/service/AddMemberRequest.java: 회원 가입 DTO. `toEntity()`로 `Member` 빌드. @NotBlank, @Email, @Pattern 등 검증 어노테이션 적용(10주차 수정).
   - model/service/BlogService.java: 게시판 비즈니스 로직. `findAll`, `save`, `findById`, `update`, `delete`, `deleteBoard` 제공. `update` 메서드는 Board 엔티티 사용, 기존 필드(user, newdate, count, likec) 유지하며 제목/내용만 수정(7주차 수정). `deleteBoard` 메서드 추가(9주차 추가).
+  - model/service/memberService.java: 회원 비즈니스 로직. @Validated 어노테이션으로 서비스 계층 검증 활성화(10주차 수정). `saveMember`, `loginCheck` 제공. 비밀번호 암호화, 이메일 중복 검사 포함.
   - model/service/TestService.java: 사용자 조회 비즈니스. `findByName`, `findAllUsers` 제공.
 
 - Resources (src/main/resources)
