@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import com.example.demo.model.domain.Member;
 import com.example.demo.model.repository.MemberRepository;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional // 트랜잭션 처리(클래스 내 모든 메소드 대상)
+@Validated
 @RequiredArgsConstructor
 public class memberService {
    @Autowired // 객체 주입 자동화, 생성자 1개면 생략 가능s
