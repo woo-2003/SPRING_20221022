@@ -10,6 +10,7 @@
 - 7주차: [블로그 게시판 글 수정]
 - 9주차: [게시판 – 검색, 페이징]
 - 10주차: [로그인과 로그아웃]
+- 11주차: [게시판 수정하기(작성자, 권한)]
 
 ## 2. 연습문제(모두 완료)
 - 2주차: URL 맵핑과 컨트롤러 추가하기
@@ -251,6 +252,49 @@ public class memberService {
 }
 ```
 
+- 11주차: [게시판 수정하기(작성자, 권한)]
+  - 글 저장 시 작성자를 로그인 사용자(email)로 설정하고 기본값(newdate, count, likec)을 서버에서 세팅.
+
+```java
+// BlogController.java (글쓰기 저장)
+@PostMapping("/api/boards")
+public String addboards(@ModelAttribute AddArticleRequest request, HttpSession session) {
+  String email = (String) session.getAttribute("email");
+  if (email == null) return "redirect:/member_login";
+  request.setUser(email);
+  request.setNewdate(LocalDate.now().toString());
+  request.setCount("0");
+  request.setLikec("0");
+  blogService.save(request);
+  return "redirect:/board_list";
+}
+```
+
+  - 글쓰기 화면에서 작성자를 로그인 이메일로 표시(읽기 전용).
+
+```html
+<!-- board_write.html -->
+<input type="text" class="form-control" id="author" th:value="${email}" readonly>
+```
+
+  - 글 상세 보기에서 로그인 사용자와 작성자가 일치할 때만 수정/삭제 버튼 노출.
+
+```html
+<!-- board_view.html -->
+<tr th:each="board : ${boards}">
+  <td th:if="${email == board.user}">
+    <a class="btn btn-warning" th:href="@{/board_edit/{id}(id=${board.id})}">수정</a>
+    <form th:action="@{/api/board_delete/{id}(id=${board.id})}" method="post" style="display:inline;">
+      <input type="hidden" name="_method" value="delete">
+      <button type="submit" class="btn btn-danger">삭제</button>
+    </form>
+  </td>
+  <td th:if="${email != board.user}">
+    <span class="text-muted">본인 글만 수정/삭제할 수 있습니다.</span>
+  </td>
+</tr>
+```
+
 ## 3. 홈페이지 내용 수정
 - 텍스트,디자인 등
 - 메뉴 수정: 네비게이션 바 메뉴 한글화 (3주차) . 
@@ -277,10 +321,10 @@ public class memberService {
     - `PUT /api/article_edit/{id}`: 글 수정 처리 후 목록으로 리다이렉트.
     - `DELETE /api/article_delete/{id}`: 글 삭제 처리 후 목록으로 리다이렉트.
     - `GET /board_list`: Board 게시글 목록 조회(페이징, 검색 지원) 후 `board_list.html` 렌더. 페이지 기준 시작 번호(startNum) 계산하여 전달(9주차 수정).
-    - `GET /board_view/{id}`: Board 게시글 상세 조회 후 `board_view.html` 렌더.
-    - `GET /board_write`: 글쓰기 화면 렌더.
+    - `GET /board_view/{id}`: Board 게시글 상세 조회 후 `board_view.html` 렌더. 로그인 사용자 이메일을 함께 전달(11주차 수정).
+    - `GET /board_write`: 글쓰기 화면 렌더. 로그인 사용자만 접근, 이메일을 모델로 전달(11주차 수정).
     - `GET /board_edit/{id}`: Board 게시글 수정 화면 렌더(7주차 추가).
-    - `POST /api/boards`: Board 글 저장 후 목록으로 리다이렉트.
+    - `POST /api/boards`: Board 글 저장 후 목록으로 리다이렉트. 작성자를 로그인 이메일로 설정하고 기본값(newdate, count, likec) 서버에서 세팅(11주차 수정).
     - `PUT /api/board_edit/{id}`: Board 글 수정 처리 후 목록으로 리다이렉트(7주차 추가).
     - `DELETE /api/board_delete/{id}`: Board 글 삭제 처리 후 목록으로 리다이렉트(9주차 추가).
   - controller/BlogRestController.java: REST 관련 보조 컨트롤러.
@@ -317,8 +361,8 @@ public class memberService {
   - templates/article_list.html: 게시글 목록 테이블 + 글 추가 폼. 수정/삭제 UI와 폼 전송 포함.
   - templates/article_edit.html: 게시글 수정 폼 화면.
   - templates/board_list.html: Board 게시글 목록 테이블(페이징, 검색 지원). 글쓰기 버튼 포함. "ID" 컬럼을 "글번호"로 변경하고 페이지 기준 순차 번호 출력(9주차 수정).
-  - templates/board_view.html: Board 게시글 상세 보기. 수정/삭제 버튼 포함.
-  - templates/board_write.html: Board 글쓰기 폼 화면.
+  - templates/board_view.html: Board 게시글 상세 보기. 작성자와 로그인 이메일이 일치할 때만 수정/삭제 버튼 표시(11주차 수정).
+  - templates/board_write.html: Board 글쓰기 폼 화면. 로그인 사용자의 이메일을 작성자로 표시(11주차 수정).
   - templates/board_edit.html: Board 게시글 수정 폼 화면. 현재 제목/내용을 폼에 미리 채워넣음(7주차 추가).
   - templates/error_page/error_type_mismatch.html: 잘못된 파라미터 타입 접근 시 표시하는 에러 페이지.
   - templates/hello.html: `hello` 화면 템플릿.
