@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>파일 업로드 오류</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 text-danger">파일 업로드 오류</h1>
+        <div class="alert alert-danger mt-4" role="alert">
+            <h4 class="alert-heading">파일 업로드 중 오류가 발생했습니다!</h4>
+            <p th:if="${error}" th:text="${error}">오류 메시지가 표시됩니다.</p>
+            <p th:if="${!error}">파일 업로드 중 예상치 못한 오류가 발생했습니다.</p>
+            <hr>
+            <p class="mb-0">다시 시도하시거나 관리자에게 문의해주세요.</p>
+        </div>
+        <div class="mt-4">
+            <a href="javascript:history.back()" class="btn btn-primary">이전 페이지로</a>
+            <a href="/" class="btn btn-secondary ml-2">홈으로</a>
+        </div>
+    </div>
+</body>
+</html>
+

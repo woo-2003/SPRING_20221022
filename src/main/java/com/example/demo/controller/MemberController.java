@@ -43,15 +43,8 @@ public class MemberController {
     @PostMapping("/api/login_check") // 로그인(아이디, 패스워드) 체크
     public String checkMembers(@ModelAttribute AddMemberRequest request, Model model, HttpServletRequest request2, HttpServletResponse response) {
         try {
-            HttpSession session = request2.getSession(false); // 기존 세션 가져오기(존재하지 않으면 null 반환)
-            if (session != null) {
-                session.invalidate(); // 기존 세션 무효화
-                Cookie cookie = new Cookie("JSESSIONID", null); // JSESSIONID 초기화
-                cookie.setPath("/"); // 쿠키 경로
-                cookie.setMaxAge(0); // 쿠키 삭제(0으로 설정)
-                response.addCookie(cookie); // 응답으로 쿠키 전달
-            }
-            session = request2.getSession(true); // 새로운 세션 생성
+            // 사용자마다 다른 이름 세션 생성 (2명 이상 로그인 가능)
+            HttpSession session = request2.getSession(true); // 새로운 세션 생성 (기존 세션 무효화하지 않음)
 
             Member member = memberService.loginCheck(request.getEmail(), request.getPassword()); // 패스워드 반환
             String sessionId = UUID.randomUUID().toString(); // 임의의 고유 ID로 세션 생성
@@ -70,17 +63,18 @@ public class MemberController {
     public String member_logout(Model model, HttpServletRequest request2, HttpServletResponse response) {
     try {
         HttpSession session = request2.getSession(false); // 기존 세션 가져오기(존재하지 않으면 null 반환)
-        session.invalidate(); // 기존 세션 무효화
-        Cookie cookie = new Cookie("JSESSIONID", null); // 기본 이름은 JSESSIONID
-        cookie.setPath("/"); // 쿠키의 경로
-        cookie.setMaxAge(0); // 쿠키 만료 0이면 삭제
-        response.addCookie(cookie); // 응답에 쿠키 설정
-        session = request2.getSession(true); // 새로운 세션 생성
-        System.out.println("세션 userId: " + session.getAttribute("userId"  )); // 초기화 후 IDE 터미널에 세션 값 출력
-        return "login"; // 로그인 페이지로 리다이렉트      
-        } catch (IllegalArgumentException e) {
-          model.addAttribute("error", e.getMessage()); // 에러 메시지 전달
-          return "login"; // 로그인 실패 시 로그인 페이지로 리다이렉트
+        if (session != null) {
+            // 현재 사용자의 세션과 쿠키만 삭제
+            session.invalidate(); // 현재 사용자 세션 무효화
+            Cookie cookie = new Cookie("JSESSIONID", null); // 기본 이름은 JSESSIONID
+            cookie.setPath("/"); // 쿠키의 경로
+            cookie.setMaxAge(0); // 쿠키 만료 0이면 삭제
+            response.addCookie(cookie); // 응답에 쿠키 설정
+        }
+        return "login"; // 로그인 페이지로 리다이렉트      
+        } catch (Exception e) {
+          model.addAttribute("error", "로그아웃 중 오류가 발생했습니다."); // 에러 메시지 전달
+          return "login"; // 로그인 페이지로 리다이렉트
         }
     }
 }

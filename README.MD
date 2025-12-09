@@ -11,33 +11,34 @@
 - 9주차: [게시판 – 검색, 페이징]
 - 10주차: [로그인과 로그아웃]
 - 11주차: [게시판 수정하기(작성자, 권한)]
+- 12주차: [세션처리와 파일 업로드]
 
 ## 2. 연습문제(모두 완료)
 - 2주차: URL 맵핑과 컨트롤러 추가하기
   - DemoController.java에 /hello2 맵핑을 추가하고, Model을 사용해 5개의 데이터(data1~data5)를 View로 전달
 
 ```java
-// DemoController.java
-@GetMapping("/hello2") // 전송 방식 GET
-public String hello2(Model model) {
-  model.addAttribute("data1", " 홍길동님."); // model 설정
-  model.addAttribute("data2", " 방갑습니다.");
-  model.addAttribute("data3", " 오늘.");
-  model.addAttribute("data4", " 날씨는.");
-  model.addAttribute("data5", " 매우 좋습니다.");
-  return "hello2"; // hello2.html 연결
-}
+  // DemoController.java
+  @GetMapping("/hello2") // 전송 방식 GET
+  public String hello2(Model model) {
+    model.addAttribute("data1", " 홍길동님."); // model 설정
+    model.addAttribute("data2", " 방갑습니다.");
+    model.addAttribute("data3", " 오늘.");
+    model.addAttribute("data4", " 날씨는.");
+    model.addAttribute("data5", " 매우 좋습니다.");
+    return "hello2"; // hello2.html 연결
+  }
 ```
 
   - hello2.html에서 Thymeleaf의 th:text 속성을 이용해 컨트롤러가 보낸 5개의 데이터를 출력
 
 ```html
-<p th:text="${data1}"></p>
-<p th:text="${data2}"></p>
-<p th:text="${data3}"></p>
-<p th:text="${data4}"></p>
-<p th:text="${data5}"></p>
-<a href="index/">홈페이지 메인</a>
+  <p th:text="${data1}"></p>
+  <p th:text="${data2}"></p>
+  <p th:text="${data3}"></p>
+  <p th:text="${data4}"></p>
+  <p th:text="${data5}"></p>
+  <a href="index/">홈페이지 메인</a>
 ```
 
 - 3주차: [상세 페이지 수정하기 (창 닫기 기능)] 
@@ -45,32 +46,32 @@ public String hello2(Model model) {
   - DemoController.java에 맵핑 추가
 
 ```java
-@GetMapping("/index")
-    public String index() {
-    return "index";
-    }
+  @GetMapping("/index")
+      public String index() {
+      return "index";
+      }
 ```
 
   - 되돌아가기 기능 추가
 
 ```html
-<a class="btn btn-primary py-3 px-5" href="/index">되돌아가기</a>
+      <a class="btn btn-primary py-3 px-5" href="/index">되돌아가기</a>
 ```
 
   - static/js/main.js 파일에 confirmClose() 함수 추가
 
 ```javascript
-function confirmClose() {
-    if (confirm("정말 창을 닫으시겠습니까?")) {
-        window.close(); 
-    }
-}
+  function confirmClose() {
+      if (confirm("정말 창을 닫으시겠습니까?")) {
+          window.close(); 
+      }
+  }
 ```
 
   - 창닫기 기능
-
+  
 ```html
-<a href="#" onclick="confirmClose()" class="btn btn-primary py-3 px-5">창닫기</a>
+  <a href="#" onclick="confirmClose()" class="btn btn-primary py-3 px-5">창닫기</a>
 ```
 
 - 4주차: [데이터베이스 연동 설정] 
@@ -295,6 +296,65 @@ public String addboards(@ModelAttribute AddArticleRequest request, HttpSession s
 </tr>
 ```
 
+- 12주차: [세션처리와 파일 업로드]
+  - 세션 처리 개선: 2명 이상 로그인 가능하도록 수정. 사용자마다 고유 세션 생성, 로그아웃 시 현재 사용자 세션만 삭제.
+
+```java
+// MemberController.java (로그인)
+@PostMapping("/api/login_check")
+public String checkMembers(...) {
+    // 사용자마다 다른 이름 세션 생성 (2명 이상 로그인 가능)
+    HttpSession session = request2.getSession(true); // 새로운 세션 생성 (기존 세션 무효화하지 않음)
+    String sessionId = UUID.randomUUID().toString(); // 임의의 고유 ID로 세션 생성
+    session.setAttribute("userId", sessionId);
+    session.setAttribute("email", email);
+    ...
+}
+```
+
+```java
+// MemberController.java (로그아웃)
+@GetMapping("/api/logout")
+public String member_logout(...) {
+    HttpSession session = request2.getSession(false);
+    if (session != null) {
+        // 현재 사용자의 세션과 쿠키만 삭제
+        session.invalidate();
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
+    return "login";
+}
+```
+
+  - 파일 업로드 개선: 동일 파일명 처리(타임스탬프와 UUID 추가), 파일 업로드 에러 페이지 처리.
+
+```java
+// FileController.java
+@PostMapping("/upload-email")
+public String uploadEmail(...) {
+    String baseFileName = sanitizedEmail + ".txt";
+    Path filePath = uploadPath.resolve(baseFileName);
+    
+    // 동일 파일명이 존재하면 타임스탬프와 UUID를 추가하여 다른 이름으로 저장
+    if (Files.exists(filePath)) {
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        String uuid = UUID.randomUUID().toString().substring(0, 8);
+        String newFileName = sanitizedEmail + "_" + timestamp + "_" + uuid + ".txt";
+        filePath = uploadPath.resolve(newFileName);
+    }
+    ...
+    } catch (IOException e) {
+        redirectAttributes.addFlashAttribute("error", "파일 업로드 중 오류가 발생했습니다: " + e.getMessage());
+        return "redirect:/error_page/file_upload_error"; // 파일 업로드 에러 페이지로 리다이렉트
+    }
+}
+```
+
+  - 파일 업로드 에러 페이지 생성: error_page/file_upload_error.html 생성.
+
 ## 3. 홈페이지 내용 수정
 - 텍스트,디자인 등
 - 메뉴 수정: 네비게이션 바 메뉴 한글화 (3주차) . 
@@ -333,8 +393,11 @@ public String addboards(@ModelAttribute AddArticleRequest request, HttpSession s
     - `GET /join_new`: 회원 가입 페이지 렌더.
     - `POST /api/members`: 회원 가입 처리. @Valid로 입력값 검증(10주차 수정).
     - `GET /member_login`: 로그인 페이지 렌더.
-    - `POST /api/login_check`: 로그인 처리(이메일, 비밀번호 확인).
-    - `GET /api/logout`: 로그아웃 처리.
+    - `POST /api/login_check`: 로그인 처리(이메일, 비밀번호 확인). 사용자마다 고유 세션 생성, 2명 이상 로그인 가능(12주차 수정).
+    - `GET /api/logout`: 로그아웃 처리. 현재 사용자의 세션과 쿠키만 삭제(12주차 수정).
+  - controller/FileController.java: 파일 업로드 컨트롤러(12주차 추가).
+    - `POST /upload-email`: 이메일 내용을 파일로 업로드. 동일 파일명 처리(타임스탬프+UUID 추가), 에러 페이지 처리 포함.
+    - `GET /error_page/file_upload_error`: 파일 업로드 에러 페이지 렌더.
   - controller/DemoController.java: 실습용 화면 컨트롤러.
     - `GET /hello`, `/hello2`: 모델 데이터 전달 및 템플릿 렌더.
     - `GET /about_detailed`, `/index`: 포트폴리오/메인 페이지 연결.
@@ -365,6 +428,7 @@ public String addboards(@ModelAttribute AddArticleRequest request, HttpSession s
   - templates/board_write.html: Board 글쓰기 폼 화면. 로그인 사용자의 이메일을 작성자로 표시(11주차 수정).
   - templates/board_edit.html: Board 게시글 수정 폼 화면. 현재 제목/내용을 폼에 미리 채워넣음(7주차 추가).
   - templates/error_page/error_type_mismatch.html: 잘못된 파라미터 타입 접근 시 표시하는 에러 페이지.
+  - templates/error_page/file_upload_error.html: 파일 업로드 오류 시 표시하는 에러 페이지(12주차 추가).
   - templates/hello.html: `hello` 화면 템플릿.
   - templates/hello2.html: 5개 모델 속성(data1~data5)을 `th:text`로 출력.
   - templates/about_detailed.html: 상세 페이지. 되돌아가기/창닫기 동작을 위한 버튼 사용.
