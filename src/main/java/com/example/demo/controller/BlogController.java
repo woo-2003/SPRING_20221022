@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 // import java.util.List;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -84,11 +85,13 @@ public class BlogController{
     }
 }
     @GetMapping("/board_view/{id}") // 게시판 링크 지정
-    public String board_view(Model model, @PathVariable Long id) {
+    public String board_view(Model model, @PathVariable Long id, HttpSession session) {
+      String email = (String) session.getAttribute("email"); // 로그인 사용자 이메일
       Optional<Board> list = blogService.findById(id); // 선택한 게시판 글
 
       if (list.isPresent()) {
         model.addAttribute("boards", list.get()); // 존재할 경우 실제 Board 객체를 모델에 추가
+        model.addAttribute("email", email); // 현재 로그인 사용자
       } else {
         // 처리할 로직 추가 (예: 오류 페이지로 리다이렉트, 예외 처리 등)
         return "/error_page/article_error"; // 오류 처리 페이지로 연결
@@ -126,12 +129,28 @@ public class BlogController{
 
     // 글쓰기 게시판
     @GetMapping("/board_write")
-      public String board_write() {
+      public String board_write(Model model, HttpSession session) {
+      String userId = (String) session.getAttribute("userId");
+      String email = (String) session.getAttribute("email");
+      if (userId == null) {
+        return "redirect:/member_login";
+      }
+      model.addAttribute("email", email); // 작성자 표시용
       return "board_write";
     }
 
     @PostMapping("/api/boards") // 글쓰기 게시판 저장
-      public String addboards(@ModelAttribute AddArticleRequest request) {
+      public String addboards(@ModelAttribute AddArticleRequest request, HttpSession session) {
+      String userId = (String) session.getAttribute("userId");
+      String email = (String) session.getAttribute("email");
+      if (userId == null || email == null) {
+        return "redirect:/member_login";
+      }
+      // 작성자와 기본값을 서버에서 설정
+      request.setUser(email);
+      request.setNewdate(LocalDate.now().toString());
+      request.setCount("0");
+      request.setLikec("0");
       blogService.save(request);
       return "redirect:/board_list"; // .HTML 연결
     }
