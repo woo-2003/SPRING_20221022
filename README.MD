@@ -376,35 +376,35 @@ if (Files.exists(filePath)) {
 ## 실제 결과 스크린샷
 
 ### 1. 포트폴리오 메인 페이지
-![포트폴리오 메인 페이지](screenshots/01_portfolio_main.png)
+![포트폴리오 메인 페이지](src/main/resources/static/screenshots/01_portfolio_main.png)
 *포트폴리오 메인 페이지 - 헤더, 자기소개, 기술 경험 섹션*
 
 ### 2. 로그인 페이지
-![로그인 페이지](screenshots/02_login.png)
+![로그인 페이지](src/main/resources/static/screenshots/02_login.png)
 *로그인 폼 - 이메일과 비밀번호 입력*
 
 ### 3. 회원가입 페이지
-![회원가입 페이지](screenshots/03_join.png)
+![회원가입 페이지](src/main/resources/static/screenshots/03_join.png)
 *회원가입 폼 - 이름, 이메일, 비밀번호, 나이, 전화번호, 주소 입력*
 
 ### 4. 게시판 목록
-![게시판 목록](screenshots/04_board_list.png)
+![게시판 목록](src/main/resources/static/screenshots/04_board_list.png)
 *게시판 목록 - 검색창, 페이징, 로그인 사용자 표시*
 
 ### 5. 게시판 상세 보기 (본인 글)
-![게시판 상세 보기 - 본인 글](screenshots/05_board_view_own.png)
+![게시판 상세 보기 - 본인 글](src/main/resources/static/screenshots/05_board_view_own.png)
 *게시글 상세 보기 - 본인 글일 경우 수정/삭제 버튼 표시*
 
 ### 6. 게시판 상세 보기 (타인 글)
-![게시판 상세 보기 - 타인 글](screenshots/06_board_view_other.png)
+![게시판 상세 보기 - 타인 글](src/main/resources/static/screenshots/06_board_view_other.png)
 *게시글 상세 보기 - 타인 글일 경우 권한 안내 메시지 표시*
 
 ### 7. 게시글 작성
-![게시글 작성](screenshots/07_board_write.png)
+![게시글 작성](src/main/resources/static/screenshots/07_board_write.png)
 *게시글 작성 폼 - 작성자 자동 입력 (읽기 전용), 제목/내용 입력*
 
 ### 8. 파일 업로드 완료
-![파일 업로드 완료](screenshots/08_upload_end.png)
+![파일 업로드 완료](src/main/resources/static/screenshots/08_upload_end.png)
 *파일 업로드 성공 메시지*
 
 ---
