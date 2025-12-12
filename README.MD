@@ -1,115 +1,211 @@
-## 1. 프로젝트 소개
+# 자바 웹프로그래밍(2) 기말레포트
+
+## 프로젝트 개요
+
 - **개발자**: 20221022 정우영
 - **개발 기간**: 2025.09 ~ 2025.12 (총 15주)
-- **프로젝트 개요**:
-    Spring Boot를 기반으로 **개인 포트폴리오 소개 사이트**와 **블로그 서비스**를 통합한 웹 애플리케이션입니다.
-    기초적인 CRUD부터 페이징, 검색, 그리고 Spring Security를 활용한 인증/인가 시스템까지 웹 개발의 필수 기능을 모두 구현하였습니다.
+- **과목**: 성결대학교 "자바 웹 프로그래밍(2)" 강의 실습
+
+### 프로젝트 설명
+
+**Spring Boot를 기반으로 한 개인 포트폴리오 소개 사이트와 블로그 서비스를 통합한 웹 애플리케이션**입니다. 
+
+**주요 특징:**
+- 기초적인 CRUD부터 페이징, 검색, Spring Security를 활용한 인증/인가 시스템까지 웹 개발의 필수 기능 구현
+- MySQL 데이터베이스 연동 및 JPA를 활용한 데이터 관리
+- Thymeleaf 템플릿 엔진을 활용한 동적 웹 페이지 구성
 
 ---
-## 1. 전체 실습과정 완료
-- 기본 기능 동작.
-- 2-1주차[스프링 부트 개발환경 완료]
-- 2-2주차[컨트롤러 입문]
-- 3주차[포트폴리오템플릿 작성]
-- 4주차: [MYSQl 연동 및 작성]
-- 5주차: [블로그 게시판 조회, 글쓰기 구현]
-- 6주차: [블로그 게시판 수정 ,삭제 구현]
-- 7주차: [블로그 게시판 글 수정]
-- 9주차: [게시판 – 검색, 페이징]
-- 10주차: [로그인과 로그아웃]
-- 11주차: [게시판 수정하기(작성자, 권한)]
-- 12주차: [세션처리와 파일 업로드]
 
-## 2. 연습문제(모두 완료)
-- 2주차: URL 맵핑과 컨트롤러 추가하기
-  - DemoController.java에 /hello2 맵핑을 추가하고, Model을 사용해 5개의 데이터(data1~data5)를 View로 전달
+## 주차별 실습 내용 요약
+
+### 2-1주차: 스프링 부트 개발환경 완료
+- Spring Boot 3.5.7 프로젝트 생성
+- Maven 빌드 도구 설정
+- 기본 프로젝트 구조 이해
+
+### 2-2주차: 컨트롤러 입문
+- `@Controller` 어노테이션 학습
+- `@GetMapping`을 통한 URL 매핑
+- `Model` 객체를 통한 데이터 전달
+- Thymeleaf 템플릿 연동
+
+### 3주차: 포트폴리오 템플릿 작성
+- Bootstrap 기반 포트폴리오 템플릿 적용
+- Thymeleaf 문법 실습 (`th:text`, `th:each` 등)
+- JavaScript 함수 작성 및 이벤트 처리
+- **커스터마이징**: 프로필 이미지, 자기소개, 기술 경험 섹션을 본인 정보로 수정
+
+### 4주차: MySQL 연동 및 작성
+- MySQL 데이터베이스 연동 설정
+- JPA/Hibernate 설정
+- `@Entity`, `@Repository` 어노테이션 학습
+- 데이터베이스 테이블 생성 및 데이터 조회
+
+### 5주차: 블로그 게시판 조회, 글쓰기 구현
+- 게시판 기본 CRUD 기능 구현
+- `@PostMapping`을 통한 글 작성 처리
+- `redirect:`를 활용한 페이지 리다이렉트
+- 전역 예외 처리기 구현 (`@ControllerAdvice`)
+
+### 6주차: 블로그 게시판 수정, 삭제 구현
+- `@PutMapping`, `@DeleteMapping` 학습
+- HiddenHttpMethodFilter 설정
+- 게시글 수정/삭제 기능 구현
+
+### 7주차: 블로그 게시판 글 수정
+- JPA Dirty Checking 활용
+- 게시글 수정 시 기존 필드 유지 로직 구현
+- `Board` 엔티티를 활용한 게시판 시스템 구축
+
+### 9주차: 게시판 – 검색, 페이징
+- Spring Data JPA `Pageable` 인터페이스 활용
+- 페이징 처리 구현 (페이지당 5개 게시글)
+- 제목 기반 검색 기능 (`Containing` 메서드)
+- 페이지 기준 순차 글번호 표시 로직 구현
+
+### 10주차: 로그인과 로그아웃
+- Spring Security 의존성 추가
+- `PasswordEncoder`를 활용한 비밀번호 암호화
+- `@Valid` 어노테이션을 통한 입력값 검증
+- 회원가입/로그인/로그아웃 기능 구현
+
+### 11주차: 게시판 수정하기(작성자, 권한)
+- `HttpSession`을 활용한 세션 관리
+- 로그인 사용자 정보를 통한 접근 제어
+- 작성자 본인만 수정/삭제 가능하도록 권한 체크
+- 서버에서 작성자 및 기본값 자동 설정
+
+### 12주차: 세션처리와 파일 업로드
+- 다중 사용자 세션 처리 (2명 이상 동시 로그인 가능)
+- 파일 업로드 기능 구현
+- 동일 파일명 처리 (타임스탬프 + UUID 추가)
+- 파일 업로드 에러 페이지 구현
+
+---
+
+## 연습문제 해결 및 구현 내용
+
+### 2주차 연습문제: URL 맵핑과 컨트롤러 추가하기
+
+**문제**: `DemoController.java`에 `/hello2` 맵핑을 추가하고, Model을 사용해 5개의 데이터(data1~data5)를 View로 전달
+
+**해결 방법**:
+- `DemoController.java`에 `@GetMapping("/hello2")` 메서드 추가
+- `model.addAttribute()`를 통해 5개의 데이터 전달
+- `hello2.html`에서 `th:text` 속성을 이용해 데이터 출력
+
+**구현 파일**:
+- `controller/DemoController.java` (27-35줄)
+- `templates/hello2.html`
 
 ```java
-  // DemoController.java
-  @GetMapping("/hello2") // 전송 방식 GET
-  public String hello2(Model model) {
-    model.addAttribute("data1", " 홍길동님."); // model 설정
-    model.addAttribute("data2", " 방갑습니다.");
-    model.addAttribute("data3", " 오늘.");
-    model.addAttribute("data4", " 날씨는.");
-    model.addAttribute("data5", " 매우 좋습니다.");
-    return "hello2"; // hello2.html 연결
-  }
+// DemoController.java
+@GetMapping("/hello2")
+public String hello2(Model model) {
+  model.addAttribute("data1", " 홍길동님.");
+  model.addAttribute("data2", " 방갑습니다.");
+  model.addAttribute("data3", " 오늘.");
+  model.addAttribute("data4", " 날씨는.");
+  model.addAttribute("data5", " 매우 좋습니다.");
+  return "hello2";
+}
 ```
 
-  - hello2.html에서 Thymeleaf의 th:text 속성을 이용해 컨트롤러가 보낸 5개의 데이터를 출력
+---
 
-```html
-  <p th:text="${data1}"></p>
-  <p th:text="${data2}"></p>
-  <p th:text="${data3}"></p>
-  <p th:text="${data4}"></p>
-  <p th:text="${data5}"></p>
-  <a href="index/">홈페이지 메인</a>
-```
+### 3주차 연습문제: 상세 페이지 수정하기 (창 닫기 기능)
 
-- 3주차: [상세 페이지 수정하기 (창 닫기 기능)] 
-  - about_detailed.html의 '되돌아가기' 버튼과 '창닫기' 버튼 추가, onclick="confirmClose()" 추가
-  - DemoController.java에 맵핑 추가
+**문제**: `about_detailed.html`에 '되돌아가기' 버튼과 '창닫기' 버튼 추가
 
-```java
-  @GetMapping("/index")
-      public String index() {
-      return "index";
-      }
-```
+**해결 방법**:
+- `DemoController.java`에 `/index` 맵핑 추가
+- `static/js/main.js`에 `confirmClose()` 함수 추가
+- `about_detailed.html`에 버튼 및 이벤트 핸들러 추가
 
-  - 되돌아가기 기능 추가
-
-```html
-      <a class="btn btn-primary py-3 px-5" href="/index">되돌아가기</a>
-```
-
-  - static/js/main.js 파일에 confirmClose() 함수 추가
+**구현 파일**:
+- `controller/DemoController.java` (37-40줄)
+- `static/js/main.js` (127-131줄)
+- `templates/about_detailed.html`
 
 ```javascript
-  function confirmClose() {
-      if (confirm("정말 창을 닫으시겠습니까?")) {
-          window.close(); 
-      }
-  }
+// main.js
+function confirmClose() {
+    if (confirm("정말 창을 닫으시겠습니까?")) {
+        window.close();
+    }
+}
 ```
 
-  - 창닫기 기능
-  
-```html
-  <a href="#" onclick="confirmClose()" class="btn btn-primary py-3 px-5">창닫기</a>
-```
+---
 
-- 4주차: [데이터베이스 연동 설정] 
-  - VS Code MySQL 확장을 사용하여 testdb 테이블에 사용자 2명(아저씨, 꾸러기) INSERT 완료
-  - TestService.java에 findAllUsers() 메서드를 추가하여 testRepository.findAll() 호출
-  - DemoController.java의 /testdb 맵핑을 수정하여 findAllUsers() 결과를 Model에 "users"라는 이름으로 추가
-  - testdb.html을 수정하여 Thymeleaf th:each 반복문을 사용해 users 리스트의 모든 사용자 ID와 이름을 출력
+### 4주차 연습문제: 데이터베이스 연동 설정
 
-- 5주차: [페이지 리다이렉트]
-  - 글쓰기 처리 방식을 @Controller 방식으로 변경.
-  - BlogController.java에 @PostMapping("/api/articles") 메서드 추가 .
-  - 게시글 저장(blogService.save()) 후, "redirect:/article_list"를 반환하여 목록 페이지로 자동 이동(리다이렉트) 구현.
-  - 충돌 방지를 위해 BlogRestController.java의 @PostMapping("/api/articles") 메서드 주석 처리.
+**문제**: `testdb` 테이블에 사용자 데이터를 INSERT하고, Thymeleaf를 통해 리스트 출력
 
-- 5주차: [추가 - 예외처리]
-  - URL 경로의 ID 파라미터 타입 불일치(MethodArgumentTypeMismatchException) 시 커스텀 에러 페이지를 보여주도록 구현 .
-  - exception 패키지 생성 및 GlobalExceptionHandler.java 파일 추가.
-  - @ControllerAdvice 어노테이션을 사용하여 전역 예외 처리기 등록.
-  - @ExceptionHandler(MethodArgumentTypeMismatchException.class) 어노테이션을 사용하여 특정 예외 처리 메서드 지정.
-  - 타입 불일치 예외 발생 시 보여줄 새로운 에러 페이지(error_page/error_type_mismatch.html) 생성 및 반환.
+**해결 방법**:
+- VS Code MySQL 확장을 사용하여 테이블에 데이터 INSERT
+- `TestService.java`에 `findAllUsers()` 메서드 추가
+- `DemoController.java`의 `/testdb` 맵핑에서 서비스 호출
+- `testdb.html`에서 `th:each` 반복문으로 데이터 출력
 
-- 7주차: [블로그 게시판 글 수정]
-  - BlogService.java의 update 메서드를 Board 엔티티 사용하도록 수정.
-  - 기존 게시글의 user, newdate, count, likec 값을 유지하면서 제목과 내용만 수정하도록 구현.
+**구현 파일**:
+- `model/service/TestService.java` (23-25줄)
+- `controller/DemoController.java` (58-65줄)
+- `templates/testdb.html`
+
+---
+
+### 5주차 연습문제: 페이지 리다이렉트
+
+**문제**: 글쓰기 처리 후 목록 페이지로 자동 이동
+
+**해결 방법**:
+- `BlogController.java`에 `@PostMapping("/api/articles")` 메서드 추가
+- `blogService.save()` 호출 후 `return "redirect:/article_list"` 반환
+- `BlogRestController.java`의 동일 경로 메서드 주석 처리하여 충돌 방지
+
+**구현 파일**:
+- `controller/BlogController.java` (183-190줄)
+
+---
+
+### 5주차 추가 연습문제: 예외처리
+
+**문제**: URL 경로의 ID 파라미터 타입 불일치 시 커스텀 에러 페이지 표시
+
+**해결 방법**:
+- `exception` 패키지 생성 및 `GlobalExceptionHandler.java` 파일 추가
+- `@ControllerAdvice` 어노테이션으로 전역 예외 처리기 등록
+- `@ExceptionHandler(MethodArgumentTypeMismatchException.class)`로 특정 예외 처리
+- `error_page/error_type_mismatch.html` 에러 페이지 생성
+
+**구현 파일**:
+- `exception/GlobalExceptionHandler.java`
+- `templates/error_page/error_type_mismatch.html`
+
+---
+
+### 7주차 연습문제: 블로그 게시판 글 수정
+
+**문제**: `Board` 엔티티를 사용하여 게시글 수정 기능 구현 (기존 필드 유지)
+
+**해결 방법**:
+- `BlogService.java`의 `update` 메서드를 `Board` 엔티티 사용하도록 수정
+- 기존 게시글의 `user`, `newdate`, `count`, `likec` 값을 유지하면서 제목과 내용만 수정
+- `BlogController.java`에 `/board_edit/{id}` GET, `/api/board_edit/{id}` PUT 맵핑 추가
+- `board_edit.html` 템플릿 생성
+
+**구현 파일**:
+- `model/service/BlogService.java` (57-75줄)
+- `controller/BlogController.java` (102-113줄, 165-169줄)
+- `templates/board_edit.html`
 
 ```java
 // BlogService.java
 public void update(Long id, AddArticleRequest request) {
-  Optional<Board> optionalBoard = blogRepository2.findById(id); // 단일 글 조회
-  optionalBoard.ifPresent(board -> { // 값이 있으면
-    // 기존 게시글의 user, newdate, count, likec 값을 유지하면서 제목과 내용만 수정
+  Optional<Board> optionalBoard = blogRepository2.findById(id);
+  optionalBoard.ifPresent(board -> {
     board.update(
       request.getTitle(), 
       request.getContent(), 
@@ -117,151 +213,88 @@ public void update(Long id, AddArticleRequest request) {
       board.getNewdate(), 
       board.getCount(), 
       board.getLikec()
-    ); // 값을 수정
-    blogRepository2.save(board); // Board 객체에 저장
+    );
+    blogRepository2.save(board);
   });
 }
 ```
 
-  - BlogController.java에 /board_edit/{id} GET 맵핑 추가하여 수정 화면 표시.
+---
 
-```java
-@GetMapping("/board_edit/{id}") // 게시판 글 수정 화면 맵핑
-public String board_edit(Model model, @PathVariable Long id) {
-  Optional<Board> list = blogService.findById(id); // 선택한 게시판 글
-  if (list.isPresent()) {
-    model.addAttribute("board", list.get()); // 존재하면 Board 객체를 모델에 추가
-  } else {
-    return "error_page/article_error"; // 오류 처리 페이지로 연결
-  }
-  return "board_edit"; // .HTML 연결
-}
-```
+### 9주차 연습문제: 게시판 – 검색, 페이징
 
-  - BlogController.java에 /api/board_edit/{id} PUT 맵핑 추가하여 수정 처리 후 board_list로 리다이렉트.
+**문제 1**: 게시판 페이지 글 번호를 DB의 id 대신 페이지 기준 순차 번호로 변경
 
-```java
-@PutMapping("/api/board_edit/{id}")
-public String updateBoard(@PathVariable Long id, @ModelAttribute AddArticleRequest request) {
-  blogService.update(id, request);
-  return "redirect:/board_list"; // 글 수정 이후 board_list.html 연결
-}
-```
+**해결 방법**:
+- `BlogController.java`의 `/board_list`에서 `startNum` 계산: `int startNum = (page * pageSize) + 1;`
+- `board_list.html`에서 `th:each`의 `iterStat.index`를 활용하여 순차 번호 출력
 
-  - board_edit.html 템플릿 생성. 현재 게시글의 제목과 내용을 폼에 미리 채워넣어 수정 가능하도록 구현.
+**구현 파일**:
+- `controller/BlogController.java` (74-75줄)
+- `templates/board_list.html` (42-43줄)
 
-- 9주차: [게시판 – 검색, 페이징]
-  - 게시판 페이지 글 번호 표시 개선: DB의 id 대신 페이지 기준 순차 번호로 변경.
+**문제 2**: 게시판 삭제 기능 구현
 
-```java
-// BlogController.java
-@GetMapping("/board_list")
-public String board_list(...) {
-  int pageSize = 5; // 한 페이지의 게시글 수
-  // 페이지 기준 시작 번호 계산
-  int startNum = (page * pageSize) + 1;
-  model.addAttribute("startNum", startNum); // 시작 번호
-  ...
-}
-```
+**해결 방법**:
+- `BlogService.java`에 `deleteBoard(Long id)` 메서드 추가
+- `BlogController.java`에 `/api/board_delete/{id}` DELETE 맵핑 추가
 
-  - board_list.html에서 "ID" 컬럼을 "글번호"로 변경하고 순차 번호 출력.
+**구현 파일**:
+- `model/service/BlogService.java` (81-83줄)
+- `controller/BlogController.java` (177-181줄)
 
-```html
-<!-- board_list.html -->
-<thead>
-  <tr>
-    <th>글번호</th>
-    ...
-  </tr>
-</thead>
-<tbody>
-  <tr th:each="board, iterStat : ${boards.content}">
-    <td th:text="${startNum + iterStat.index}"></td>
-    ...
-  </tr>
-</tbody>
-```
+---
 
-  - BlogService.java에 deleteBoard(Long id) 메서드 추가.
+### 10주차 연습문제: 입력값 필터링
 
-```java
-// BlogService.java
-public void deleteBoard(Long id) {
-  blogRepository2.deleteById(id);
-}
-```
+**문제**: 회원가입 시 입력값 검증 구현
 
-  - BlogController.java에 /api/board_delete/{id} DELETE 맵핑 추가하여 삭제 처리 후 board_list로 리다이렉트.
+**해결 방법**:
+- `pom.xml`에 `spring-boot-starter-validation` 의존성 추가
+- `AddMemberRequest.java`에 검증 어노테이션 추가:
+  - 이름: `@NotBlank`, `@Pattern` (특수문자 제외)
+  - 이메일: `@NotBlank`, `@Email`
+  - 비밀번호: `@NotBlank`, `@Pattern` (8자 이상, 대소문자 및 숫자 포함)
+  - 나이: `@NotBlank`, `@Pattern` (19세 이상 90세 이하)
+- `MemberController.java`의 `addmembers` 메서드에 `@Valid` 어노테이션 추가
+- `memberService.java` 클래스에 `@Validated` 어노테이션 추가
 
-```java
-@DeleteMapping("/api/board_delete/{id}")
-public String deleteBoard(@PathVariable Long id) {
-  blogService.deleteBoard(id);
-  return "redirect:/board_list";
-}
-```
-
-- 10주차: [입력값 필터링]
-  - pom.xml에 spring-boot-starter-validation 의존성 추가.
-
-```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-validation</artifactId>
-</dependency>
-```
-
-  - AddMemberRequest.java에 검증 어노테이션 추가.
-    - 이름: @NotBlank, @Pattern으로 특수문자 제외 검증.
-    - 이메일: @NotBlank, @Email로 이메일 형식 검증.
-    - 비밀번호: @NotBlank, @Pattern으로 8자 이상, 대소문자 및 숫자 포함 검증.
-    - 나이: @NotBlank, @Pattern으로 19세 이상 90세 이하 검증.
-    - 모바일, 주소: 공백 허용(검증 없음).
+**구현 파일**:
+- `pom.xml` (64-66줄)
+- `model/service/AddMemberRequest.java` (14-28줄)
+- `controller/MemberController.java` (33줄)
+- `model/service/memberService.java` (16줄)
 
 ```java
 // AddMemberRequest.java
-@NotBlank(message = "이름은 필수입니다.")
+@NotBlank(message = "이름은 비울 수 없습니다.")
 @Pattern(regexp = "^[A-Za-z가-힣0-9]+$", message = "이름에는 특수문자를 사용할 수 없습니다.")
 private String name;
 
-@NotBlank(message = "이메일은 필수입니다.")
-@Email(message = "올바른 이메일 형식이 아닙니다.")
+@NotBlank(message = "이메일은 비울 수 없습니다.")
+@Email(message = "이메일 형식이 올바르지 않습니다.")
 private String email;
 
-@NotBlank(message = "비밀번호는 필수입니다.")
-@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "비밀번호는 8자 이상, 대소문자 및 숫자를 포함해야 합니다.")
+@NotBlank(message = "비밀번호는 비울 수 없습니다.")
+@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "비밀번호는 대소문자, 숫자를 포함해 8자 이상이어야 합니다.")
 private String password;
-
-@NotBlank(message = "나이는 필수입니다.")
-@Pattern(regexp = "^(19|[2-8]\\d|90)$", message = "나이는 19세 이상 90세 이하여야 합니다.")
-private String age;
 ```
 
-  - MemberController.java의 addmembers 메서드에 @Valid 어노테이션 추가.
+---
 
-```java
-@PostMapping("/api/members") // 회원 가입 저장
-public String addmembers(@Valid @ModelAttribute AddMemberRequest request) {
-    memberService.saveMember(request);
-    return "join_end"; // .HTML 연결
-}
-```
+### 11주차 연습문제: 게시판 수정하기(작성자, 권한)
 
-  - memberService.java 클래스에 @Validated 어노테이션 추가하여 서비스 계층에서도 검증 활성화.
+**문제**: 작성자 본인에게만 수정/삭제 버튼 노출
 
-```java
-@Service
-@Validated // 서비스 계층에서 검증 활성화
-@Transactional
-@RequiredArgsConstructor
-public class memberService {
-    ...
-}
-```
+**해결 방법**:
+- 글 저장 시 작성자를 로그인 사용자(email)로 설정하고 기본값(newdate, count, likec)을 서버에서 세팅
+- 글쓰기 화면에서 작성자를 로그인 이메일로 표시(읽기 전용)
+- 글 상세 보기에서 로그인 사용자와 작성자가 일치할 때만 수정/삭제 버튼 노출 (`th:if` 사용)
 
-- 11주차: [게시판 수정하기(작성자, 권한)]
-  - 글 저장 시 작성자를 로그인 사용자(email)로 설정하고 기본값(newdate, count, likec)을 서버에서 세팅.
+**구현 파일**:
+- `controller/BlogController.java` (131-140줄, 142-156줄, 87-100줄)
+- `templates/board_write.html` (18-20줄)
+- `templates/board_view.html` (52-65줄)
 
 ```java
 // BlogController.java (글쓰기 저장)
@@ -278,175 +311,222 @@ public String addboards(@ModelAttribute AddArticleRequest request, HttpSession s
 }
 ```
 
-  - 글쓰기 화면에서 작성자를 로그인 이메일로 표시(읽기 전용).
-
-```html
-<!-- board_write.html -->
-<input type="text" class="form-control" id="author" th:value="${email}" readonly>
-```
-
-  - 글 상세 보기에서 로그인 사용자와 작성자가 일치할 때만 수정/삭제 버튼 노출.
-
 ```html
 <!-- board_view.html -->
-<tr th:each="board : ${boards}">
-  <td th:if="${email == board.user}">
-    <a class="btn btn-warning" th:href="@{/board_edit/{id}(id=${board.id})}">수정</a>
-    <form th:action="@{/api/board_delete/{id}(id=${board.id})}" method="post" style="display:inline;">
-      <input type="hidden" name="_method" value="delete">
-      <button type="submit" class="btn btn-danger">삭제</button>
-    </form>
-  </td>
-  <td th:if="${email != board.user}">
-    <span class="text-muted">본인 글만 수정/삭제할 수 있습니다.</span>
-  </td>
-</tr>
+<td th:if="${email == board.user}">
+  <a class="btn btn-warning" th:href="@{/board_edit/{id}(id=${board.id})}">수정</a>
+  <form th:action="@{/api/board_delete/{id}(id=${board.id})}" method="post" style="display:inline;">
+    <input type="hidden" name="_method" value="delete">
+    <button type="submit" class="btn btn-danger">삭제</button>
+  </form>
+</td>
+<td th:if="${email != board.user}">
+  <span class="text-muted">본인 글만 수정/삭제할 수 있습니다.</span>
+</td>
 ```
 
-- 12주차: [세션처리와 파일 업로드]
-  - 세션 처리 개선: 2명 이상 로그인 가능하도록 수정. 사용자마다 고유 세션 생성, 로그아웃 시 현재 사용자 세션만 삭제.
+---
+
+### 12주차 연습문제: 세션처리와 파일 업로드
+
+**문제 1**: 2명 이상 로그인 가능하도록 세션 처리 개선
+
+**해결 방법**:
+- 로그인 시 기존 세션 무효화 로직 제거
+- 사용자마다 고유 세션 생성 (`UUID.randomUUID()`)
+- 로그아웃 시 현재 사용자의 세션과 쿠키만 삭제
+
+**구현 파일**:
+- `controller/MemberController.java` (43-60줄, 62-79줄)
 
 ```java
 // MemberController.java (로그인)
 @PostMapping("/api/login_check")
 public String checkMembers(...) {
     // 사용자마다 다른 이름 세션 생성 (2명 이상 로그인 가능)
-    HttpSession session = request2.getSession(true); // 새로운 세션 생성 (기존 세션 무효화하지 않음)
-    String sessionId = UUID.randomUUID().toString(); // 임의의 고유 ID로 세션 생성
+    HttpSession session = request2.getSession(true); // 기존 세션 무효화하지 않음
+    String sessionId = UUID.randomUUID().toString();
     session.setAttribute("userId", sessionId);
     session.setAttribute("email", email);
     ...
 }
 ```
 
-```java
-// MemberController.java (로그아웃)
-@GetMapping("/api/logout")
-public String member_logout(...) {
-    HttpSession session = request2.getSession(false);
-    if (session != null) {
-        // 현재 사용자의 세션과 쿠키만 삭제
-        session.invalidate();
-        Cookie cookie = new Cookie("JSESSIONID", null);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-    }
-    return "login";
-}
-```
+**문제 2**: 파일 업로드 시 동일 파일명 처리 및 에러 페이지 구현
 
-  - 파일 업로드 개선: 동일 파일명 처리(타임스탬프와 UUID 추가), 파일 업로드 에러 페이지 처리.
+**해결 방법**:
+- 동일 파일명이 존재하면 타임스탬프와 UUID를 추가하여 다른 이름으로 저장
+- 파일 업로드 에러 발생 시 전용 에러 페이지로 리다이렉트
+
+**구현 파일**:
+- `controller/FileController.java` (24-75줄)
+- `templates/error_page/file_upload_error.html`
 
 ```java
 // FileController.java
-@PostMapping("/upload-email")
-public String uploadEmail(...) {
-    String baseFileName = sanitizedEmail + ".txt";
-    Path filePath = uploadPath.resolve(baseFileName);
-    
-    // 동일 파일명이 존재하면 타임스탬프와 UUID를 추가하여 다른 이름으로 저장
-    if (Files.exists(filePath)) {
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        String uuid = UUID.randomUUID().toString().substring(0, 8);
-        String newFileName = sanitizedEmail + "_" + timestamp + "_" + uuid + ".txt";
-        filePath = uploadPath.resolve(newFileName);
-    }
-    ...
-    } catch (IOException e) {
-        redirectAttributes.addFlashAttribute("error", "파일 업로드 중 오류가 발생했습니다: " + e.getMessage());
-        return "redirect:/error_page/file_upload_error"; // 파일 업로드 에러 페이지로 리다이렉트
-    }
+if (Files.exists(filePath)) {
+    String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+    String uuid = UUID.randomUUID().toString().substring(0, 8);
+    String newFileName = sanitizedEmail + "_" + timestamp + "_" + uuid + ".txt";
+    filePath = uploadPath.resolve(newFileName);
 }
 ```
+---
 
-  - 파일 업로드 에러 페이지 생성: error_page/file_upload_error.html 생성.
+## 실제 결과 스크린샷
 
-## 3. 홈페이지 내용 수정
-- 텍스트,디자인 등
-- 메뉴 수정: 네비게이션 바 메뉴 한글화 (3주차) . 
-- 프로필 이미지 src="img/profile2.png(AI 본인 프로필사진) 으로 교체 (3주차). 
-- 내소개(About)' 텍스트 수정 (3주차) . 
-- 기술 & 경험(Skills & Expertise) 섹션 텍스트 한글 수정 (4주차) . 
-- Thymeleaf 테스트 페이지 (thymeleaf_test1.html) 생성 및 th:utext, th:value, th:field, th:href, th:with 문법 실습 (4주차)
-- 게시판 링크 추가: index.html 네비게이션 바 '게시판' 메뉴에 /article_list 링크 추가 (5주차) .
-- 게시판 목록 수정/삭제 버튼 추가 (6주차) .
+### 1. 포트폴리오 메인 페이지
+![포트폴리오 메인 페이지](screenshots/01_portfolio_main.png)
+*포트폴리오 메인 페이지 - 헤더, 자기소개, 기술 경험 섹션*
 
-## 4. 소스 코드 정리
-- 각 파일의 역할 설명 (실제 코드 내용 기반)
+### 2. 로그인 페이지
+![로그인 페이지](screenshots/02_login.png)
+*로그인 폼 - 이메일과 비밀번호 입력*
 
-- 루트/빌드
-  - pom.xml: Spring Boot 3.5.7, Java 21, Web/Thymeleaf/JPA/Actuator, Lombok, Devtools, MySQL Connector, Validation 의존성 및 플러그인 설정(10주차 수정).
-  - mvnw, mvnw.cmd: Maven Wrapper 실행 스크립트.
+### 3. 회원가입 페이지
+![회원가입 페이지](screenshots/03_join.png)
+*회원가입 폼 - 이름, 이메일, 비밀번호, 나이, 전화번호, 주소 입력*
 
-- Java (src/main/java)
-  - DemoApplication.java: 애플리케이션 진입점. `SpringApplication.run(...)`으로 부트스트랩.
-  - controller/BlogController.java: 게시판 화면 컨트롤러.
-    - `GET /article_list`: 게시글 목록 조회 후 `article_list.html` 렌더.
-    - `GET /article_edit/{id}`: 단건 조회 후 수정 화면 렌더(없으면 오류 페이지로 분기).
-    - `POST /api/articles`: 글 저장 후 목록으로 리다이렉트.
-    - `PUT /api/article_edit/{id}`: 글 수정 처리 후 목록으로 리다이렉트.
-    - `DELETE /api/article_delete/{id}`: 글 삭제 처리 후 목록으로 리다이렉트.
-    - `GET /board_list`: Board 게시글 목록 조회(페이징, 검색 지원) 후 `board_list.html` 렌더. 페이지 기준 시작 번호(startNum) 계산하여 전달(9주차 수정).
-    - `GET /board_view/{id}`: Board 게시글 상세 조회 후 `board_view.html` 렌더. 로그인 사용자 이메일을 함께 전달(11주차 수정).
-    - `GET /board_write`: 글쓰기 화면 렌더. 로그인 사용자만 접근, 이메일을 모델로 전달(11주차 수정).
-    - `GET /board_edit/{id}`: Board 게시글 수정 화면 렌더(7주차 추가).
-    - `POST /api/boards`: Board 글 저장 후 목록으로 리다이렉트. 작성자를 로그인 이메일로 설정하고 기본값(newdate, count, likec) 서버에서 세팅(11주차 수정).
-    - `PUT /api/board_edit/{id}`: Board 글 수정 처리 후 목록으로 리다이렉트(7주차 추가).
-    - `DELETE /api/board_delete/{id}`: Board 글 삭제 처리 후 목록으로 리다이렉트(9주차 추가).
-  - controller/BlogRestController.java: REST 관련 보조 컨트롤러.
-    - `GET /favicon.ico`: 빈 처리(불필요한 에러 방지). 주석 처리된 REST 예제 포함.
-  - controller/MemberController.java: 회원 관련 컨트롤러.
-    - `GET /join_new`: 회원 가입 페이지 렌더.
-    - `POST /api/members`: 회원 가입 처리. @Valid로 입력값 검증(10주차 수정).
-    - `GET /member_login`: 로그인 페이지 렌더.
-    - `POST /api/login_check`: 로그인 처리(이메일, 비밀번호 확인). 사용자마다 고유 세션 생성, 2명 이상 로그인 가능(12주차 수정).
-    - `GET /api/logout`: 로그아웃 처리. 현재 사용자의 세션과 쿠키만 삭제(12주차 수정).
-  - controller/FileController.java: 파일 업로드 컨트롤러(12주차 추가).
-    - `POST /upload-email`: 이메일 내용을 파일로 업로드. 동일 파일명 처리(타임스탬프+UUID 추가), 에러 페이지 처리 포함.
-    - `GET /error_page/file_upload_error`: 파일 업로드 에러 페이지 렌더.
-  - controller/DemoController.java: 실습용 화면 컨트롤러.
-    - `GET /hello`, `/hello2`: 모델 데이터 전달 및 템플릿 렌더.
-    - `GET /about_detailed`, `/index`: 포트폴리오/메인 페이지 연결.
-    - `GET /test1`: Thymeleaf 문법 실습 페이지 연결.
-    - `GET /testdb`: DB 사용자 목록 조회(Model에 `users`) 후 `testdb.html` 렌더.
-  - exception/GlobalExceptionHandler.java: 전역 예외 처리.
-    - `MethodArgumentTypeMismatchException` 발생 시 `error_page/error_type_mismatch` 반환.
-  - model/domain/Article.java: 게시글 JPA 엔티티(id, title, content). `@Builder`, `update(title, content)` 제공.
-  - model/domain/Board.java: 게시글 JPA 엔티티(id, title, content, user, newdate, count, likec). `@Builder`, `update(...)` 제공.
-  - model/domain/Member.java: 회원 JPA 엔티티(id, name, email, password, age, mobile, address). `@Builder` 제공. email은 unique 제약.
-  - model/domain/TestDB.java: 예제 JPA 엔티티(id, name).
-  - model/repository/BlogRepository.java: `Article`용 `JpaRepository<Article, Long>`.
-  - model/repository/BoardRepository.java: `Board`용 `JpaRepository<Board, Long>` + `findByTitleContainingIgnoreCase` (페이징 검색 지원).
-  - model/repository/MemberRepository.java: `Member`용 `JpaRepository<Member, Long>` + `findByEmail(String)`.
-  - model/repository/TestRepository.java: `TestDB`용 `JpaRepository<TestDB, Long>` + `findByName(String)`.
-  - model/service/AddArticleRequest.java: 게시글 생성/수정 DTO. `toEntity()`로 `Board` 빌드. title, content 외 user, newdate, count, likec 필드 포함.
-  - model/service/AddMemberRequest.java: 회원 가입 DTO. `toEntity()`로 `Member` 빌드. @NotBlank, @Email, @Pattern 등 검증 어노테이션 적용(10주차 수정).
-  - model/service/BlogService.java: 게시판 비즈니스 로직. `findAll`, `save`, `findById`, `update`, `delete`, `deleteBoard` 제공. `update` 메서드는 Board 엔티티 사용, 기존 필드(user, newdate, count, likec) 유지하며 제목/내용만 수정(7주차 수정). `deleteBoard` 메서드 추가(9주차 추가).
-  - model/service/memberService.java: 회원 비즈니스 로직. @Validated 어노테이션으로 서비스 계층 검증 활성화(10주차 수정). `saveMember`, `loginCheck` 제공. 비밀번호 암호화, 이메일 중복 검사 포함.
-  - model/service/TestService.java: 사용자 조회 비즈니스. `findByName`, `findAllUsers` 제공.
+### 4. 게시판 목록
+![게시판 목록](screenshots/04_board_list.png)
+*게시판 목록 - 검색창, 페이징, 로그인 사용자 표시*
 
-- Resources (src/main/resources)
-  - application.properties: 앱 이름, 정적 리소스 경로, MySQL 접속 정보, JPA 설정(ddl-auto=update, show-sql), HiddenHttpMethodFilter 활성화.
-  - templates/article_list.html: 게시글 목록 테이블 + 글 추가 폼. 수정/삭제 UI와 폼 전송 포함.
-  - templates/article_edit.html: 게시글 수정 폼 화면.
-  - templates/board_list.html: Board 게시글 목록 테이블(페이징, 검색 지원). 글쓰기 버튼 포함. "ID" 컬럼을 "글번호"로 변경하고 페이지 기준 순차 번호 출력(9주차 수정).
-  - templates/board_view.html: Board 게시글 상세 보기. 작성자와 로그인 이메일이 일치할 때만 수정/삭제 버튼 표시(11주차 수정).
-  - templates/board_write.html: Board 글쓰기 폼 화면. 로그인 사용자의 이메일을 작성자로 표시(11주차 수정).
-  - templates/board_edit.html: Board 게시글 수정 폼 화면. 현재 제목/내용을 폼에 미리 채워넣음(7주차 추가).
-  - templates/error_page/error_type_mismatch.html: 잘못된 파라미터 타입 접근 시 표시하는 에러 페이지.
-  - templates/error_page/file_upload_error.html: 파일 업로드 오류 시 표시하는 에러 페이지(12주차 추가).
-  - templates/hello.html: `hello` 화면 템플릿.
-  - templates/hello2.html: 5개 모델 속성(data1~data5)을 `th:text`로 출력.
-  - templates/about_detailed.html: 상세 페이지. 되돌아가기/창닫기 동작을 위한 버튼 사용.
-  - templates/index.html, templates/index1.html: 메인/샘플 인덱스 페이지 템플릿.
-  - templates/testdb.html: `users` 리스트를 `th:each`로 순회하여 ID/이름 출력.
-  - templates/thymeleaf_test1.html: `th:utext`, `th:value`, `th:field`, `th:href`, `th:with` 등 문법 실습 페이지.
-  - static/js/main.js: UI 보조 스크립트. `confirmClose()` 등 프론트 동작 정의.
-  - static/css/bootstrap.min.css, static/css/style.css: 스타일시트.
-  - static/img/*: 페이지에서 사용하는 이미지 리소스.
-  - static/lib/*: 외부 프론트 라이브러리(animate, counterup, easing, isotope, lightbox, owlcarousel, typed, waypoints, wow 등) 정적 파일.
-  - static/scss/*: Bootstrap SCSS 소스(컴포넌트/유틸리티/믹스인 포함).
+### 5. 게시판 상세 보기 (본인 글)
+![게시판 상세 보기 - 본인 글](screenshots/05_board_view_own.png)
+*게시글 상세 보기 - 본인 글일 경우 수정/삭제 버튼 표시*
 
-- Test (src/test/java)
-  - DemoApplicationTests.java: 기본 테스트 스캐폴딩.
+### 6. 게시판 상세 보기 (타인 글)
+![게시판 상세 보기 - 타인 글](screenshots/06_board_view_other.png)
+*게시글 상세 보기 - 타인 글일 경우 권한 안내 메시지 표시*
+
+### 7. 게시글 작성
+![게시글 작성](screenshots/07_board_write.png)
+*게시글 작성 폼 - 작성자 자동 입력 (읽기 전용), 제목/내용 입력*
+
+### 8. 파일 업로드 완료
+![파일 업로드 완료](screenshots/08_upload_end.png)
+*파일 업로드 성공 메시지*
+
+---
+
+## 기술 스택
+
+- **Backend**: Spring Boot 3.5.7, Java 21
+- **Database**: MySQL 8.0
+- **ORM**: Spring Data JPA / Hibernate
+- **Template Engine**: Thymeleaf
+- **Frontend**: Bootstrap 4, JavaScript, jQuery
+- **Security**: Spring Security (비밀번호 암호화)
+- **Validation**: Bean Validation (Jakarta Validation)
+- **Build Tool**: Maven
+- **기타**: Lombok, Spring DevTools
+
+---
+
+## 주요 기능 상세
+
+### 1. 포트폴리오 기능
+- **메인 페이지** (`index.html`): 개인 소개, 기술 경험, 프로젝트 포트폴리오
+- **상세 페이지** (`about_detailed.html`): 상세 소개 및 되돌아가기/창닫기 기능
+- **연락하기 폼**: 이메일 내용을 파일로 업로드
+
+### 2. 회원 관리 기능
+- **회원가입**: 입력값 검증 (이름, 이메일, 비밀번호, 나이)
+- **로그인**: 이메일/비밀번호 인증, 세션 관리
+- **로그아웃**: 현재 사용자 세션 및 쿠키 삭제
+- **비밀번호 암호화**: BCryptPasswordEncoder 사용
+
+### 3. 게시판 기능
+- **게시글 목록**: 페이징 (페이지당 5개), 검색 기능
+- **게시글 작성**: 로그인 사용자만 가능, 작성자 자동 설정
+- **게시글 조회**: 상세 내용 확인
+- **게시글 수정**: 작성자 본인만 가능, 기존 필드 유지
+- **게시글 삭제**: 작성자 본인만 가능
+- **권한 관리**: 로그인 사용자와 작성자 일치 여부로 수정/삭제 버튼 표시
+
+### 4. 파일 업로드 기능
+- **이메일 내용 저장**: 연락하기 폼의 내용을 텍스트 파일로 저장
+- **중복 파일명 처리**: 타임스탬프 + UUID를 추가하여 고유 파일명 생성
+- **에러 처리**: 파일 업로드 실패 시 전용 에러 페이지 표시
+
+### 5. 예외 처리
+- **전역 예외 처리**: `@ControllerAdvice`를 통한 예외 처리
+- **타입 불일치 예외**: 잘못된 파라미터 타입 접근 시 커스텀 에러 페이지
+
+---
+
+## 데이터베이스 구조
+
+### 테이블 정보
+
+#### `board` 테이블
+- `id` (Long, PK, AUTO_INCREMENT): 게시글 고유 번호
+- `title` (String, NOT NULL): 게시글 제목
+- `content` (String, NOT NULL): 게시글 내용
+- `user` (String, NOT NULL): 작성자 (이메일)
+- `newdate` (String, NOT NULL): 작성일
+- `count` (String, NOT NULL): 조회수
+- `likec` (String, NOT NULL): 좋아요 수
+
+#### `member` 테이블
+- `id` (Long, PK, AUTO_INCREMENT): 회원 고유 번호
+- `name` (String, NOT NULL): 이름
+- `email` (String, UNIQUE, NOT NULL): 이메일 (중복 불가)
+- `password` (String, NOT NULL): 암호화된 비밀번호
+- `age` (String, NOT NULL): 나이
+- `mobile` (String, NOT NULL): 전화번호
+- `address` (String, NOT NULL): 주소
+
+#### `article` 테이블
+- `id` (Long, PK, AUTO_INCREMENT): 게시글 고유 번호
+- `title` (String, NOT NULL): 게시글 제목
+- `content` (String, NOT NULL): 게시글 내용
+
+#### `testdb` 테이블
+- `id` (Long, PK, AUTO_INCREMENT): 사용자 고유 번호
+- `name` (String): 이름
+
+---
+
+## 주요 구현 파일 및 메서드
+
+### 컨트롤러
+
+#### `BlogController.java`
+- `GET /board_list`: 게시판 목록 조회 (페이징, 검색)
+- `GET /board_view/{id}`: 게시글 상세 조회
+- `GET /board_write`: 글쓰기 화면
+- `GET /board_edit/{id}`: 글 수정 화면
+- `POST /api/boards`: 게시글 저장
+- `PUT /api/board_edit/{id}`: 게시글 수정
+- `DELETE /api/board_delete/{id}`: 게시글 삭제
+
+#### `MemberController.java`
+- `GET /join_new`: 회원가입 페이지
+- `POST /api/members`: 회원가입 처리
+- `GET /member_login`: 로그인 페이지
+- `POST /api/login_check`: 로그인 처리
+- `GET /api/logout`: 로그아웃 처리
+
+#### `FileController.java`
+- `POST /upload-email`: 파일 업로드 처리
+- `GET /error_page/file_upload_error`: 파일 업로드 에러 페이지
+
+### 서비스
+
+#### `BlogService.java`
+- `findAll(Pageable)`: 게시글 목록 조회 (페이징)
+- `searchByKeyword(String, Pageable)`: 키워드 검색
+- `findById(Long)`: 게시글 단건 조회
+- `save(AddArticleRequest)`: 게시글 저장
+- `update(Long, AddArticleRequest)`: 게시글 수정 (기존 필드 유지)
+- `deleteBoard(Long)`: 게시글 삭제
+
+#### `memberService.java`
+- `saveMember(AddMemberRequest)`: 회원가입 (비밀번호 암호화, 이메일 중복 체크)
+- `loginCheck(String, String)`: 로그인 검증 (이메일, 비밀번호 확인)
+
+---
+
+**작성일**: 2025년 12월  
+**작성자**: 20221022 정우영
