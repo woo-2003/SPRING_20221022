@@ -1,4 +1,4 @@
-# 자바 웹프로그래밍(2) 기말레포트
+# 자바 웹프로그래밍(2) 기말보고서
 
 ## 프로젝트 개요
 
@@ -137,6 +137,9 @@ function confirmClose() {
 }
 ```
 
+**스크린샷**  
+![about_detailed 스크린샷](src/main/resources/static/screenshots/exercise_03_about_detailed.png)
+
 ---
 
 ### 4주차 연습문제: 데이터베이스 연동 설정
@@ -153,6 +156,10 @@ function confirmClose() {
 - `model/service/TestService.java` (23-25줄)
 - `controller/DemoController.java` (58-65줄)
 - `templates/testdb.html`
+
+**스크린샷**  
+![testdb 스크린샷1](src/main/resources/static/screenshots/exercise_04_testdb.png)  
+![testdb 스크린샷2](src/main/resources/static/screenshots/exercise_04_testdb2.png)
 
 ---
 
@@ -218,6 +225,9 @@ public void update(Long id, AddArticleRequest request) {
   });
 }
 ```
+
+**스크린샷**  
+![board_edit 스크린샷](src/main/resources/static/screenshots/exercise_07_board_edit.png)
 
 ---
 
@@ -371,6 +381,11 @@ if (Files.exists(filePath)) {
     filePath = uploadPath.resolve(newFileName);
 }
 ```
+
+**스크린샷**  
+![session/upload 스크린샷1](src/main/resources/static/screenshots/exercise_12_session_upload.png)  
+![session/upload 스크린샷2](src/main/resources/static/screenshots/exercise_12_session_upload2.png)
+
 ---
 
 ## 실제 결과 스크린샷
